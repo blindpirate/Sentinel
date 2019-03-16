@@ -1,14 +1,16 @@
 package com.alibaba.csp.sentinel.slots.statistic.metric;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
+import com.alibaba.csp.sentinel.fixture.Retry;
+import com.alibaba.csp.sentinel.fixture.RetryRule;
 import com.alibaba.csp.sentinel.slots.statistic.base.WindowWrap;
 import com.alibaba.csp.sentinel.slots.statistic.data.MetricBucket;
 import com.alibaba.csp.sentinel.slots.statistic.metric.occupy.OccupiableBucketLeapArray;
 import com.alibaba.csp.sentinel.util.TimeUtil;
-
+import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,6 +20,8 @@ import static org.junit.Assert.assertEquals;
  * @author jialiang.linjl
  */
 public class OccupiableBucketLeapArrayTest {
+    @Rule
+    public RetryRule retryRule = new RetryRule();
 
     private final int windowLengthInMs = 200;
     private final int intervalInSec = 2;
@@ -64,6 +68,7 @@ public class OccupiableBucketLeapArrayTest {
     }
 
     @Test
+    @Retry
     public void testMultiThreadUpdateEmptyWindow() throws Exception {
         final long time = TimeUtil.currentTimeMillis();
         final int nThreads = 16;
